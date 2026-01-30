@@ -13,7 +13,8 @@ public class TopicsController : Controller
     }
     [HttpGet]
     public async Task<IActionResult> GetAllTopics()
-    { var results = await _topicRepository.GetAllTopicsAsync();
+    {
+        var results = await _topicRepository.GetAllTopicsAsync();
         if(results.Count>0)
         { return Ok(results); 
         }

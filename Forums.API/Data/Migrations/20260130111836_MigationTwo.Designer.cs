@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Forums.API.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260125160043_Initial")]
-    partial class Initial
+    [Migration("20260130111836_MigationTwo")]
+    partial class MigationTwo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,22 @@ namespace Forums.API.Data.Migrations
                     b.HasIndex("TopicId");
 
                     b.ToTable("Comments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("359e8684-ea02-41b2-b2a7-e2328ff59cfc"),
+                            CommentDate = new DateTime(2026, 1, 31, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9732),
+                            Content = "This is the content of the first COMENT.",
+                            TopicId = new Guid("7bef7d61-bd07-4bd4-b751-750e2a49c5d7")
+                        },
+                        new
+                        {
+                            Id = new Guid("83556f70-60f4-41b1-bc5a-d69bedf5b277"),
+                            CommentDate = new DateTime(2026, 2, 1, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9738),
+                            Content = "This is the content of the SECOND COMENT.",
+                            TopicId = new Guid("d992b1b9-3548-4311-a31c-e6a802865c6a")
+                        });
                 });
 
             modelBuilder.Entity("Forums.API.Entities.Topic", b =>
@@ -78,6 +94,35 @@ namespace Forums.API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Topics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7bef7d61-bd07-4bd4-b751-750e2a49c5d7"),
+                            CommentsAreAllowed = true,
+                            Content = "This is the content of the first topic.",
+                            CreatedDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9641),
+                            LastCommentDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9643),
+                            Title = "First Topic"
+                        },
+                        new
+                        {
+                            Id = new Guid("d992b1b9-3548-4311-a31c-e6a802865c6a"),
+                            CommentsAreAllowed = true,
+                            Content = "This is the content of the second topic.",
+                            CreatedDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9645),
+                            LastCommentDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9646),
+                            Title = "Second Topic"
+                        },
+                        new
+                        {
+                            Id = new Guid("29738ebb-795a-4175-be6d-7804d7da6acc"),
+                            CommentsAreAllowed = true,
+                            Content = "This is the content of the third topic.",
+                            CreatedDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9647),
+                            LastCommentDate = new DateTime(2026, 1, 30, 15, 18, 36, 492, DateTimeKind.Local).AddTicks(9648),
+                            Title = "Third Topic"
+                        });
                 });
 
             modelBuilder.Entity("Forums.API.Entities.Comment", b =>
