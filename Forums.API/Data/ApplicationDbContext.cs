@@ -15,18 +15,22 @@ public class ApplicationDbContext:DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        Guid topicalId = Guid.NewGuid();
-        Guid topicalId2 = Guid.NewGuid();
-        Guid topicalId3 = Guid.NewGuid();
-        Guid commentId = Guid.NewGuid();
-        Guid commentId2 = Guid.NewGuid();
+        var topicalId = new Guid("1c03c62e-b299-483a-ac61-cfa2fa0878c9");
+        var topicalId2 = new Guid("1ae2f862-c948-458e-88dd-b1ac4e047648");
+        var topicalId3 = new Guid ("922477dc-b396-439d-aefa-8a251a671c43");
+        var commentId = new Guid("d8aac92c-411a-4b8e-af15-8cb9a70e7044");
+        var commentId2 = new Guid("c5bd2734-c5ba-4928-994b-12260cac0297");
+
+        var crDate=new DateTime(2026, 2, 2);
+        var lcDate = new DateTime(2026, 2, 2);
+
         modelBuilder.Entity<Topic>().HasData(
             new Topic()
             {
                 Id = topicalId,
                 Title = "First Topic",
                 Content = "This is the content of the first topic.",
-                CreatedDate = DateTime.Now,
+                CreatedDate = crDate,
                 ImageUrl = null,
                 LastCommentDate = DateTime.Now,
                 CommentsAreAllowed = true                   
@@ -36,7 +40,7 @@ public class ApplicationDbContext:DbContext
                   Id = topicalId2,
                   Title = "Second Topic",
                   Content = "This is the content of the second topic.",
-                  CreatedDate = DateTime.Now,
+                  CreatedDate = crDate,
                   ImageUrl = null,
                   LastCommentDate = DateTime.Now,
                   CommentsAreAllowed = true
@@ -47,7 +51,7 @@ public class ApplicationDbContext:DbContext
                   Id = topicalId3,
                   Title = "Third Topic",
                   Content = "This is the content of the third topic.",
-                  CreatedDate = DateTime.Now,
+                  CreatedDate = crDate,
                   ImageUrl = null,
                   LastCommentDate = DateTime.Now,
                   CommentsAreAllowed = true
@@ -60,14 +64,14 @@ public class ApplicationDbContext:DbContext
                 new Comment()
                 {
                     Id = commentId,
-                    CommentDate = DateTime.Now.AddDays(1),
+                    CommentDate = lcDate.AddDays(1),
                     Content = "This is the content of the first COMENT.",
                     TopicId = topicalId
                 },
                   new Comment()
                   {
                       Id = commentId2,
-                      CommentDate = DateTime.Now.AddDays(2),
+                      CommentDate = lcDate.AddDays(2),
                       Content = "This is the content of the SECOND COMENT.",
                       TopicId = topicalId2
                   }

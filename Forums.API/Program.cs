@@ -16,6 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.Getსეცტიონ("key")));
 //DI
 builder.Services.AddScoped<ITopicRepository,TopicRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

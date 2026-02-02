@@ -11,7 +11,28 @@ public class TopicRepository : ITopicRepository
     {
         _context = context;
     }
+
+    public Task AddNewTopicAsync(Topic entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Topic> DeleteSingleTopicAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<Topic>> GetAllTopicsAsync()
     {
         return await _context.Topics.ToListAsync();    }
+
+    public Task<Topic> GetSingleTopicAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateNewTopicAsync(Topic entity)
+    {
+        throw new NotImplementedException();
+    }
 }
