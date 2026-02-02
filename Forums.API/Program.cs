@@ -17,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 //DI
 builder.Services.AddScoped<ITopicRepository,TopicRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+
 
 var app = builder.Build();
 

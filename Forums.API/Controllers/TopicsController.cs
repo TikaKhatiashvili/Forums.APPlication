@@ -15,8 +15,8 @@ public class TopicsController : Controller
     public async Task<IActionResult> GetAllTopics()
     {
         var results = await _topicRepository.GetAllTopicsAsync();
-        if(results.Count>0)
-        { return Ok(results); 
+        if(results.TotalCount>0)
+        { return Ok(results.Topics); 
         }
         return NotFound();
     }

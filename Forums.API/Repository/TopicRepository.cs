@@ -12,27 +12,41 @@ public class TopicRepository : ITopicRepository
         _context = context;
     }
 
-    public Task AddNewTopicAsync(Topic entity)
+    public async Task AddNewTopicAsync(Topic entity)
     {
-        throw new NotImplementedException();
+        await _context.Topics.AddAsync(entity);
+        await _context.SaveChangesAsync();
+
     }
 
-    public Task<Topic> DeleteSingleTopicAsync(Guid id)
+    public async Task<Topic> DeleteSingleTopicAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var topic = await _context.Topics.FirstOrDefaultAsync(c => c.Id == id);
+        if (topic != null)
+        {
+            _context.Topics.Remove(topic);
+            await _context.SaveChangesAsync();
+        }
+        return topic;
     }
 
-    public async Task<List<Topic>> GetAllTopicsAsync()
+    public async Task<(List<Topic> Topics, int TotalCount)> GetAllTopicsAsync(int pagen = 1, int pages = 10)
     {
-        return await _context.Topics.ToListAsync();    }
-
-    public Task<Topic> GetSingleTopicAsync(Guid id)
-    {
-        throw new NotImplementedException();
+        return (
+            await _context.Topics.Skip((pagen - 1) * pages).Take(pages).ToListAsync(),
+            await _context.Topics.CountAsync()
+            );
     }
 
-    public Task UpdateNewTopicAsync(Topic entity)
+    public async Task<Topic> GetSingleTopicAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _context.Topics.FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+
+    public async Task UpdateNewTopicAsync(Topic entity)
+    {
+        _context.Update(entity);
+        await _context.SaveChangesAsync();
     }
 }
