@@ -31,11 +31,14 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
         string includeProperties = null,
         bool tracking = true)
     {
-        IQueryable<T> query = _dbSet.Where(filter);
+        IQueryable<T> query = _dbSet;
+
         if (!tracking)
 
             query = query.AsNoTracking();
+        if (filter != null)
 
+            query = query.Where(filter);
         if (!string.IsNullOrWhiteSpace(includeProperties))
             query = ApplyIncludes(query, includeProperties);
 
@@ -48,11 +51,11 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
             int skip = (pageNumber.Value - 1) * pageSize.Value;
             query = query.Skip(skip).Take(pageSize.Value);
         }
-        var items=await query.ToListAsync();
-        return(items, totalCount);
+        var items = await query.ToListAsync();
+        return (items, totalCount);
     }
 
-    public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string includeProperties, bool tracking = true)//dbset დამყავს IQueryable<T> მდე
+    public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string includeProperties = null, bool tracking = true)//dbset დამყავს IQueryable<T> მდე
     {
         IQueryable<T> query = _dbSet.Where(filter);
         if (!tracking)

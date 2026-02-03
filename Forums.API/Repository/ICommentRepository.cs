@@ -1,5 +1,8 @@
-﻿namespace Forums.API.Repository;
+﻿using Forums.API.Entities;
+using Microsoft.EntityFrameworkCore;
 
-public interface ICommentRepository
+namespace Forums.API.Repository;
+
+public interface ICommentRepository : IBaseRepository<Comment, DbContext>
 {
 }

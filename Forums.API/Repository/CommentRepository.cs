@@ -1,5 +1,12 @@
-﻿namespace Forums.API.Repository;
+﻿using Forums.API.Data;
+using Forums.API.Entities;
 
-public class CommentRepository: ICommentRepository
+namespace Forums.API.Repository;
+
+public class CommentRepository : BaseRepository<Comment, ApplicationDbContext>, ICommentRepository
 {
+    public CommentRepository(ApplicationDbContext context) : base(context)
+    {
+    }
+
 }
