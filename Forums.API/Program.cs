@@ -1,5 +1,6 @@
 ﻿using Forums.API.Data;
 using Forums.API.Repository;
+using Forums.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddScoped<ITopicRepository,TopicRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+builder.Services.AddScoped<ITopicService, TopicService>();
 
 
 var app = builder.Build();

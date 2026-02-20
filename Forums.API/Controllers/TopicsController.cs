@@ -20,14 +20,14 @@ public class TopicsController : Controller
     //        return NotFound();
     //    return Ok(results);
     //}
-    //[HttpGet("{id}")]
-    //public async Task<IActionResult> GetSingleTopic(Guid id)
-    //{
-    //    var topic = await _topicRepository.GetAsync(c => c.Id == id, includProperties: "Topic");
-    //    if (topic == null)
-    //        return NotFound();
-    //    return Ok(topic);
-    //}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetSingleTopic(Guid id)
+    {
+        var topic = await _topicRepository.GetAsync(c => c.Id == id, includProperties: "Comments");
+        if (topic == null)
+            return NotFound();
+        return Ok(topic);
+    }
     //[HttpPost]
     //public async Task<IActionResult> AddTopic([FromBody] Topic topic)
     //{

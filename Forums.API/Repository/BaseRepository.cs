@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Forums.API.Repository;
@@ -22,8 +23,7 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
     public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate) => await _dbSet.AnyAsync(predicate);
 
     public async Task<(List<T> Items, int TotalCount)> GetAllAsync(
-        Expression<Func<T,
-            bool>> filter = null,
+        Expression<Func<T,bool>> filter = null,
         int? pageNumber = null,
         int? pageSize = null,
         string orderBy = null,
@@ -34,11 +34,11 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
         IQueryable<T> query = _dbSet;
 
         if (!tracking)
-
             query = query.AsNoTracking();
-        if (filter != null)
 
+        if (filter != null)
             query = query.Where(filter);
+
         if (!string.IsNullOrWhiteSpace(includeProperties))
             query = ApplyIncludes(query, includeProperties);
 
@@ -46,6 +46,7 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
 
         if (!string.IsNullOrWhiteSpace(orderBy))
             query = ApplyIncludes(orderBy, ascending, query);
+
         if (pageNumber.HasValue && pageSize.HasValue)
         {
             int skip = (pageNumber.Value - 1) * pageSize.Value;
@@ -66,9 +67,30 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
         query = ApplyIncludes(query, includeProperties);
         return await query.FirstOrDefaultAsync();
     }
-    private IQueryable<T> ApplyIncludes(string orderBy, bool ascending, IQueryable<T> query)
+    private static IQueryable<T> ApplyIncludes(string orderBy, bool ascending, IQueryable<T> query)//ბაზიდან მომაქვს ჩანაწერი და მათ ვალაგებთ თარიღის მიხედვით, ამისთვის ვიყებთ რეფლექშენს | თუ გადმომცემენ  bool ascending - True ალაგებს ან False კლებადობით
     {
-        throw new NotImplementedException();
+        var propertyInfo = typeof(T).GetProperty(orderBy, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+    if(propertyInfo != null)
+        {
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var propertyAccess = Expression.MakeMemberAccess(parameter, propertyInfo);
+            var orderByExpression = Expression.Lambda(propertyAccess, parameter);
+            var methodName= "OrderBy";//ზრდადობით
+            if (!ascending)
+            {
+                methodName = "OrderByDescending";//კლებადობით
+            }
+            var resultExpression = Expression.Call(
+                typeof(Queryable), 
+                methodName, 
+                new Type[] { typeof(T), propertyInfo.PropertyType }, 
+                query.Expression, 
+                Expression.Quote(orderByExpression));
+            query = query.Provider.CreateQuery<T>(resultExpression);
+        }
+        return query;
+
+
     }
     private static IQueryable<T> ApplyIncludes(IQueryable<T> query, string includeProperties)
     {
