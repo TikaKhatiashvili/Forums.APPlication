@@ -1,6 +1,9 @@
 ﻿using Forums.API.Data;
 using Forums.API.Repository;
 using Forums.API.Services;
+using Forums.API.Services.Mapping;
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +24,10 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 builder.Services.AddScoped<ITopicService, TopicService>();
 
-
+var config = new TypeAdapterConfig();
+MappingConfig.RegisterMappings(config);
+builder.Services.AddSingleton(config);
+//builder.Services.AddScoped<IMapper, ServiceMapper>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

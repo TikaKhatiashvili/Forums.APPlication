@@ -4,5 +4,4 @@ public record CommentForUpdatingDto
     (
     Guid Id,
     string Content
-  
-    );
+      );
