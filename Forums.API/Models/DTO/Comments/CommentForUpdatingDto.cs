@@ -1,7 +1,9 @@
-﻿namespace Forums.API.Models.DTO.Comments;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Forums.API.Models.DTO.Comments;
 
 public record CommentForUpdatingDto
     (
-    Guid Id,
-    string Content
-      );
+    [Required]Guid Id,
+    [Required] string Content
+    );

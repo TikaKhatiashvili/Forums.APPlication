@@ -10,17 +10,17 @@ public class TopicService : ITopicService
     private readonly ITopicRepository _topicRepository;
     private readonly IMapper _mapper;
 
-    public TopicService(ITopicRepository topicRepository,IMapper mapper)
+    public TopicService(ITopicRepository topicRepository, IMapper mapper)
     {
         _topicRepository = topicRepository;
-        _mapper = mapper;   
+        _mapper = mapper;
     }
     public async Task<int> AddNewTopicAsync(TopicForCreatingDto model)
     {
         await _topicRepository.AddAsync(_mapper.Map<Topic>(model));
         return await _topicRepository.SaveAsync();
     }
-     
+
     public async Task<int> DeleteTopicAsync(Guid topicId)
     {
         var topicToDelete = await _topicRepository.GetAsync(t => t.Id == topicId);
@@ -32,16 +32,26 @@ public class TopicService : ITopicService
         return 0;
     }
 
-    public async Task<(List<TopicListForGettingDto>,int totalCount)> GetAllTopicsAsync(int? pageNumber, int? pageSize )
+    public async Task<(List<TopicListForGettingDto>, int totalCount)> GetAllTopicsAsync(
+        int? pageNumber,
+        int? pageSize
+        )
     {
 
-        var result = await _topicRepository.GetAllAsync(pageNumber: pageNumber, pageSize: pageSize);
+        var result = await _topicRepository.GetAllAsync(
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            orderBy: "CreateDate",
+            ascending: false);
+
         if (result.Items.Count > 0)
         {
-            var meppedResult= _mapper.Map<List<TopicListForGettingDto>>(result.Items);
-            return(meppedResult,result.TotalCount);
+            var meppedResult = _mapper.Map<List<TopicListForGettingDto>>(result.Items);
+            return (meppedResult, result.TotalCount);
         }
-        return (Enumerable.Empty<TopicListForGettingDto>().ToList(),0);
+        return (Enumerable
+            .Empty<TopicListForGettingDto>()
+            .ToList(), 0);
     }
 
     public async Task<TopicDetailsForGettingDto> GetTopicDetailsForGettingAsync(Guid topicId)
@@ -59,5 +69,18 @@ public class TopicService : ITopicService
             return await _topicRepository.SaveAsync();
         }
         return 0;
+    }
+    #region Validators
+    private static void ValidateTopicForCreatingDto(TopicForCreatingDto model)
+    {
+        if (string.IsNullOrEmpty(model.Title))
+        {
+            throw new ArgumentException("Title is required");
+        }
+        if (string.IsNullOrEmpty(model.Content))
+        {
+            throw new ArgumentException("Content is required");
+        }
+        #endregion
     }
 }

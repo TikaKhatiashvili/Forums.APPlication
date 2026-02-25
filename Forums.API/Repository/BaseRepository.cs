@@ -29,7 +29,7 @@ public class BaseRepository<T, TContext> : IBaseRepository<T, TContext> where T 
         string orderBy = null,
         bool ascending = true,
         string includeProperties = null,
-        bool tracking = true)
+        bool tracking = false)
     {
         IQueryable<T> query = _dbSet;
 

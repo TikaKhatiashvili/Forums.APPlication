@@ -1,4 +1,5 @@
 ﻿using Forums.API.Data;
+using Forums.API.Middleware;
 using Forums.API.Repository;
 using Forums.API.Services;
 using Forums.API.Services.Mapping;
@@ -27,7 +28,7 @@ builder.Services.AddScoped<ITopicService, TopicService>();
 var config = new TypeAdapterConfig();
 MappingConfig.RegisterMappings(config);
 builder.Services.AddSingleton(config);
-//builder.Services.AddScoped<IMapper, ServiceMapper>();
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

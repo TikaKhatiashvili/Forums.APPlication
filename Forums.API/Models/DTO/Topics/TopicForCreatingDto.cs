@@ -1,12 +1,18 @@
-﻿namespace Forums.API.Models.DTO.Topics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Forums.API.Models.DTO.Topics;
 
 public record TopicForCreatingDto
-( 
+(
+    [Required]
+    [MaxLength(50)]
     string Title,
+    [Required]
     string Content,
-   // DateTime CreatedDate,
-    string ImageUrl//,
-   // DateTime LastCommentDate,
+    string ImageUrl
+    //, 
+    // DateTime CreatedDate,
+    // DateTime LastCommentDate,
     //bool CommentsAreAllowed
 
     );
