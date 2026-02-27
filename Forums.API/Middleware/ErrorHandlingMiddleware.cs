@@ -33,6 +33,12 @@ public class ErrorHandlingMiddleware
                 apiResponse.IsSuccess = false;
                 apiResponse.StatusCode = HttpStatusCode.BadRequest;
                 break;
+
+                     case Exception:
+                apiResponse.Message = ex.Message;
+                apiResponse.IsSuccess = false;
+                apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                break;
         }
         context.Response.ContentType = "application/json";
         context.Response.StatusCode=Convert.ToInt32(apiResponse.StatusCode);

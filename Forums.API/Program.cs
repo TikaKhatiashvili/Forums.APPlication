@@ -6,10 +6,11 @@ using Forums.API.Services.Mapping;
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+Log.Information("String Forum.API");
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,6 +26,9 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 builder.Services.AddScoped<ITopicService, TopicService>();
 
+//ეს კრიფავს ინფორმაცია Appsettings.json-დან
+builder.Host.UseSerilog((context,configuration)=> configuration.ReadFrom.Configuration(context.Configuration));
+
 var config = new TypeAdapterConfig();
 MappingConfig.RegisterMappings(config);
 builder.Services.AddSingleton(config);
@@ -37,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
