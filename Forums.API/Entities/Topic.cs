@@ -6,26 +6,31 @@ namespace Forums.API.Entities;
 public class Topic
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]   
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
     [Required]
     [MaxLength(50)]
     public string Title { get; set; }
 
-    [Required]  
+    [Required]
     public string Content { get; set; }
 
-    [Required] //მხოლოდ თარიღი
-    [Column(TypeName ="Date")]
-    public DateTime CreatedDate { get; set; }= DateTime.Now; // ჩაწერის მომენტში დრო
+    [Required]
+    [Column(TypeName = "Date")]
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public string ImageUrl { get; set; }
 
-    [Required]
     [Column(TypeName = "Date")]
     public DateTime LastCommentDate { get; set; }
 
     public bool CommentsAreAllowed { get; set; } = true;
-    public List<Comment> Comments { get; set;} 
+
+    [Required]
+    [ForeignKey(nameof(Author))]
+    public string AuthorId { get; set; }
+    public ApplicationUser Author { get; set; }
+
+    public List<Comment> Comments { get; set; }
 }
